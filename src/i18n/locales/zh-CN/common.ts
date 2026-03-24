@@ -1,0 +1,18 @@
+export default {
+  appName: '企业后台管理系统',
+  search: '全局搜索',
+  dashboard: '仪表盘',
+  system: '系统管理',
+  users: '用户管理',
+  roles: '角色权限',
+  menus: '菜单管理',
+  logs: '操作日志',
+  logout: '退出登录',
+  language: '语言',
+  light: '浅色',
+  dark: '深色',
+  login: '登录',
+  username: '用户名',
+  password: '密码',
+  captcha: '验证码',
+}

@@ -1,0 +1,18 @@
+export default {
+  appName: 'Enterprise Admin',
+  search: 'Global Search',
+  dashboard: 'Dashboard',
+  system: 'System',
+  users: 'Users',
+  roles: 'Roles',
+  menus: 'Menus',
+  logs: 'Operation Logs',
+  logout: 'Log out',
+  language: 'Language',
+  light: 'Light',
+  dark: 'Dark',
+  login: 'Sign In',
+  username: 'Username',
+  password: 'Password',
+  captcha: 'Captcha',
+}
