@@ -68,10 +68,21 @@ http.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
 http.interceptors.response.use(
   (response) => {
-    const payload = response.data as ApiResponse<unknown>
-    if (payload.code !== 0 && payload.code !== 200) {
-      message.error(payload.msg)
-      return Promise.reject(payload)
+    const payload = response.data as Record<string, unknown>
+    if ('code' in payload) {
+      const code = payload.code as unknown
+      if (code !== 0 && code !== 200) {
+        message.error(String(payload.msg ?? '请求失败'))
+        return Promise.reject(payload)
+      }
+      return response
+    }
+    if ('success' in payload) {
+      const success = payload.success as unknown
+      if (success !== true) {
+        message.error(String(payload.message ?? payload.msg ?? '请求失败'))
+        return Promise.reject(payload)
+      }
     }
     return response
   },

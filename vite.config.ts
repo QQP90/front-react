@@ -9,8 +9,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const useCDN = mode === 'production' && env.VITE_USE_CDN === 'true'
   const proxyTarget = env.VITE_API_PROXY_TARGET
-  console.log(proxyTarget,45678)
-  const enableMock = env.VITE_USE_MOCK !== 'false' && !proxyTarget
+  const enableMock = env.VITE_USE_MOCK !== 'false'
   return {
     define: {
       __API_BASE_URL__: JSON.stringify(env.VITE_API_BASE_URL || '/api'),

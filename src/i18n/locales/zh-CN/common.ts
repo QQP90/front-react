@@ -4,6 +4,7 @@ export default {
   dashboard: '仪表盘',
   system: '系统管理',
   users: '用户管理',
+  orders: '订单管理',
   roles: '角色权限',
   menus: '菜单管理',
   logs: '操作日志',

@@ -7,6 +7,7 @@ import {
   MenuOutlined,
   MenuUnfoldOutlined,
   MoonOutlined,
+  ShoppingCartOutlined,
   SafetyCertificateOutlined,
   SearchOutlined,
   SettingOutlined,
@@ -31,6 +32,7 @@ const iconMap: Record<string, ReactNode> = {
   DashboardOutlined: <DashboardOutlined />,
   SettingOutlined: <SettingOutlined />,
   UserOutlined: <UserOutlined />,
+  ShoppingCartOutlined: <ShoppingCartOutlined />,
   SafetyCertificateOutlined: <SafetyCertificateOutlined />,
   MenuOutlined: <MenuOutlined />,
   FileSearchOutlined: <FileSearchOutlined />,
@@ -57,6 +59,15 @@ const flattenMenus = (menus: MenuNode[], permissions: string[]): Array<{ path: s
   })
 }
 
+const hasMenuPath = (menus: MenuNode[], path: string): boolean => {
+  return menus.some((menu) => {
+    if (menu.path === path) {
+      return true
+    }
+    return menu.children ? hasMenuPath(menu.children, path) : false
+  })
+}
+
 function AppLayout() {
   const { t, i18n } = useTranslation()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -69,7 +80,35 @@ function AppLayout() {
   const permissions = useAppSelector((state) => state.auth.user?.permissions ?? [])
   const dynamicRoutes = useAppSelector((state) => state.auth.routes)
   const profile = useAppSelector((state) => state.auth.user)
-  const sourceMenus = dynamicRoutes.length ? dynamicRoutes : staticMenus
+  const sourceMenus = useMemo(() => {
+    if (!dynamicRoutes.length) {
+      return staticMenus
+    }
+    const ordersNode = staticMenus.find((menu) => menu.key === 'orders' && menu.path === '/orders')
+    if (!ordersNode) {
+      return dynamicRoutes
+    }
+    const lowerPermissions = permissions.map((p) => p.toLowerCase())
+    const hasAnyOrderPermission =
+      lowerPermissions.includes('order:view') || lowerPermissions.some((p) => p.startsWith('order:'))
+
+    if (ordersNode.permission && !hasAnyOrderPermission) {
+      return dynamicRoutes
+    }
+    if (hasMenuPath(dynamicRoutes, '/orders')) {
+      return dynamicRoutes
+    }
+    if (hasMenuPath(dynamicRoutes, '/system/orders')) {
+      return dynamicRoutes
+    }
+    const merged = [...dynamicRoutes]
+    const dashboardIndex = merged.findIndex((menu) => menu.path === '/dashboard')
+    merged.splice(dashboardIndex >= 0 ? dashboardIndex + 1 : 0, 0, {
+      ...ordersNode,
+      permission: lowerPermissions.includes('order:view') ? ordersNode.permission : undefined,
+    })
+    return merged
+  }, [dynamicRoutes, permissions])
   const menus = useMemo(() => toMenuItems(sourceMenus, permissions), [permissions, sourceMenus])
   const menuFlat = useMemo(() => flattenMenus(sourceMenus, permissions), [permissions, sourceMenus])
   const selectedKeys = [location.pathname]

@@ -4,6 +4,7 @@ export default {
   dashboard: 'Dashboard',
   system: 'System',
   users: 'Users',
+  orders: 'Orders',
   roles: 'Roles',
   menus: 'Menus',
   logs: 'Operation Logs',

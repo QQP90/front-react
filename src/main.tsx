@@ -6,10 +6,12 @@ import App from './App'
 import '@/i18n'
 import { store } from '@/stores'
 
+const RootApp = (
+  <Provider store={store}>
+    <App />
+  </Provider>
+)
+
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </StrictMode>,
+  import.meta.env.DEV ? RootApp : <StrictMode>{RootApp}</StrictMode>,
 )

@@ -1,6 +1,12 @@
 import dayjs from 'dayjs'
 import { MockMethod } from 'vite-plugin-mock'
 
+type MockRequest = {
+  query: Record<string, unknown>
+  body?: unknown
+  params: Record<string, string>
+}
+
 const users = Array.from({ length: 52 }).map((_, index) => ({
   id: String(index + 1),
   username: `user_${index + 1}`,
@@ -14,7 +20,7 @@ export default [
   {
     url: '/api/system/users',
     method: 'get',
-    response: ({ query }) => {
+    response: ({ query }: Pick<MockRequest, 'query'>) => {
       const current = Number(query.current ?? 1)
       const pageSize = Number(query.pageSize ?? 10)
       const start = (current - 1) * pageSize
@@ -29,6 +35,7 @@ export default [
       }
     },
   },
+
   {
     url: '/api/system/menus',
     method: 'get',
@@ -37,6 +44,7 @@ export default [
       msg: 'ok',
       data: [
         { key: 'dashboard', label: 'dashboard', path: '/dashboard' },
+        { key: 'orders', label: 'orders', path: '/orders' },
         { key: 'users', label: 'users', path: '/system/users' },
       ],
     }),

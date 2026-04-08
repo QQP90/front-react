@@ -2,7 +2,7 @@ import { Button, Drawer, Space } from 'antd'
 import { FormDrawerProps } from './types'
 import { drawerWidth } from './styles'
 
-function FormDrawer({ open, title, width, onClose, onSubmit, children }: FormDrawerProps) {
+function FormDrawer({ open, title, width, confirmLoading, onClose, onSubmit, children }: FormDrawerProps) {
   return (
     <Drawer
       open={open}
@@ -12,8 +12,10 @@ function FormDrawer({ open, title, width, onClose, onSubmit, children }: FormDra
       destroyOnClose
       extra={
         <Space>
-          <Button onClick={onClose}>取消</Button>
-          <Button type="primary" onClick={onSubmit}>
+          <Button onClick={onClose} disabled={confirmLoading}>
+            取消
+          </Button>
+          <Button type="primary" onClick={onSubmit} loading={confirmLoading}>
             提交
           </Button>
         </Space>

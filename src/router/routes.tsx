@@ -4,8 +4,9 @@ import { MenuNode } from '@/types/auth'
 export const routeComponents = {
   '/dashboard': lazy(() => import('@/views/dashboard')),
   '/system/users': lazy(() => import('@/views/system/users')),
+  '/orders': lazy(() => import('@/views/system/orders')),
+  '/system/orders': lazy(() => import('@/views/system/orders')),
   '/system/roles': lazy(() => import('@/views/system/roles')),
-  '/system/menus': lazy(() => import('@/views/system/menus')),
   '/system/logs': lazy(() => import('@/views/system/logs')),
 }
 
@@ -16,6 +17,13 @@ export const staticMenus: MenuNode[] = [
     icon: 'DashboardOutlined',
     path: '/dashboard',
     permission: 'dashboard:view',
+  },
+  {
+    key: 'orders',
+    label: 'orders',
+    icon: 'ShoppingCartOutlined',
+    path: '/orders',
+    permission: 'order:view',
   },
   {
     key: 'system',
@@ -36,13 +44,6 @@ export const staticMenus: MenuNode[] = [
         icon: 'SafetyCertificateOutlined',
         path: '/system/roles',
         permission: 'role:view',
-      },
-      {
-        key: 'menus',
-        label: 'menus',
-        icon: 'MenuOutlined',
-        path: '/system/menus',
-        permission: 'menu:view',
       },
       {
         key: 'logs',
