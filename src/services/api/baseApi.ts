@@ -90,12 +90,15 @@ const normalizePagedData = (raw: unknown): { list: unknown[]; total: number } =>
     (data.count as unknown) ??
     (data.totalCount as unknown) ??
     (data.totalElements as unknown)
-  const total = typeof totalCandidate === 'number' ? totalCandidate : Number(totalCandidate ?? list.length) || list.length
+  const total =
+    typeof totalCandidate === 'number' ? totalCandidate : Number(totalCandidate ?? list.length) || list.length
   return { list, total }
 }
 
 const toUserRow = (raw: unknown, index: number): UserRow => {
   const row = (raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {}) as Record<string, unknown>
+
+  
   const statusValue = row.status ?? row.enabled ?? row.isEnabled
   const status =
     statusValue === 'enabled' || statusValue === 1 || statusValue === true
@@ -106,34 +109,28 @@ const toUserRow = (raw: unknown, index: number): UserRow => {
 
   const id =
     String(
-      row.id ??
-        row.ID ??
-        row.userId ??
-        row.UserId ??
-        row.key ??
-        row.username ??
-        row.userName ??
-        `row_${index + 1}`,
+      row.id ?? row.ID ?? row.userId ?? row.UserId ?? row.key ?? row.username ?? row.userName ?? `row_${index + 1}`,
     ) || `row_${index + 1}`
 
   const createdAtRaw =
-    row.createdAt ??
-    row.createTime ??
-    row.created_at ??
-    row.create_time ??
-    row.registeredAt ??
-    row.registered_at
+    row.createdAt ?? row.createTime ?? row.created_at ?? row.create_time ?? row.registeredAt ?? row.registered_at
   const createdAtRawString = createdAtRaw === undefined || createdAtRaw === null ? '' : String(createdAtRaw)
-  const createdAt = createdAtRawString && dayjs(createdAtRawString).isValid() ? dayjs(createdAtRawString).format('YYYY-MM-DD') : createdAtRawString
+  const createdAt =
+    createdAtRawString && dayjs(createdAtRawString).isValid()
+      ? dayjs(createdAtRawString).format('YYYY-MM-DD')
+      : createdAtRawString
 
   const updatedAtRaw =
     row.updatedAt ?? row.updateTime ?? row.modifiedAt ?? row.modifyTime ?? row.updated_at ?? row.update_time
   const updatedAtRawString = updatedAtRaw === undefined || updatedAtRaw === null ? '' : String(updatedAtRaw)
-  const updatedAt = updatedAtRawString && dayjs(updatedAtRawString).isValid() ? dayjs(updatedAtRawString).format('YYYY-MM-DD') : updatedAtRawString
+  const updatedAt =
+    updatedAtRawString && dayjs(updatedAtRawString).isValid()
+      ? dayjs(updatedAtRawString).format('YYYY-MM-DD')
+      : updatedAtRawString
 
   const isActiveRaw = row.isActive ?? row.active ?? row.IsActive ?? row.Active
-  const isActive = typeof isActiveRaw === 'boolean' ? isActiveRaw : isActiveRaw === 1 ? true : isActiveRaw === 0 ? false : undefined
-
+  const isActive =
+    typeof isActiveRaw === 'boolean' ? isActiveRaw : isActiveRaw === 1 ? true : isActiveRaw === 0 ? false : undefined
   return {
     id,
     username: String(row.username ?? row.userName ?? row.account ?? row.loginName ?? ''),
@@ -148,7 +145,13 @@ const toUserRow = (raw: unknown, index: number): UserRow => {
     address: row.address ? String(row.address) : row.Address ? String(row.Address) : undefined,
     city: row.city ? String(row.city) : row.City ? String(row.City) : undefined,
     state: row.state ? String(row.state) : row.State ? String(row.State) : undefined,
-    zipCode: row.zipCode ? String(row.zipCode) : row.ZipCode ? String(row.ZipCode) : row.ZipCode ? String(row.ZipCode) : undefined,
+    zipCode: row.zipCode
+      ? String(row.zipCode)
+      : row.ZipCode
+        ? String(row.ZipCode)
+        : row.ZipCode
+          ? String(row.ZipCode)
+          : undefined,
     country: row.country ? String(row.country) : row.Country ? String(row.Country) : undefined,
     isActive,
     nickname: row.nickname ? String(row.nickname) : row.nickName ? String(row.nickName) : undefined,
@@ -162,25 +165,30 @@ const toUserRow = (raw: unknown, index: number): UserRow => {
 const toOrderRow = (raw: unknown, index: number): OrderRow => {
   const row = (raw && typeof raw === 'object' ? (raw as Record<string, unknown>) : {}) as Record<string, unknown>
   const id =
-    String(row.id ?? row.ID ?? row.orderId ?? row.OrderId ?? row.key ?? row.orderNo ?? row.orderNumber ?? `order_${index + 1}`) ||
-    `order_${index + 1}`
+    String(
+      row.id ??
+        row.ID ??
+        row.orderId ??
+        row.OrderId ??
+        row.key ??
+        row.orderNo ??
+        row.orderNumber ??
+        `order_${index + 1}`,
+    ) || `order_${index + 1}`
   const orderId = String(row.orderId ?? row.OrderId ?? id)
 
-  const totalPriceRaw =
-    row.totalPrice ?? row.totalAmount ?? row.total ?? row.amount ?? row.price ?? row.money
+  const totalPriceRaw = row.totalPrice ?? row.totalAmount ?? row.total ?? row.amount ?? row.price ?? row.money
   const totalPrice = typeof totalPriceRaw === 'number' ? totalPriceRaw : Number(totalPriceRaw ?? 0) || 0
 
   const orderNo = String(row.orderNo ?? row.orderNO ?? row.orderNumber ?? row.no ?? '')
   const name = String(row.name ?? row.title ?? orderNo ?? '')
   const createdAtRaw =
-    row.createdAt ??
-    row.orderDate ??
-    row.createTime ??
-    row.created_at ??
-    row.create_time ??
-    row.order_date
+    row.createdAt ?? row.orderDate ?? row.createTime ?? row.created_at ?? row.create_time ?? row.order_date
   const createdAtRawString = createdAtRaw === undefined || createdAtRaw === null ? '' : String(createdAtRaw)
-  const createdAt = createdAtRawString && dayjs(createdAtRawString).isValid() ? dayjs(createdAtRawString).format('YYYY-MM-DD') : createdAtRawString
+  const createdAt =
+    createdAtRawString && dayjs(createdAtRawString).isValid()
+      ? dayjs(createdAtRawString).format('YYYY-MM-DD')
+      : createdAtRawString
 
   return {
     id,

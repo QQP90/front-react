@@ -52,6 +52,8 @@ export default [
             'dashboard:view',
             'system:read',
             'user:view',
+            'user:create',
+            'user:update',
             'user:delete',
             'order:view',
             'order:create',

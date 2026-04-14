@@ -71,7 +71,10 @@ function UsersPage() {
             <a
               onClick={async () => {
                 setEditingId(row.id)
-                const detail = await getUserById({ userId: row.id }).unwrap()
+                const detail = await getUserById({ userId: row.id }).unwrap().then((res) => {
+                  console.log(res,3456789)
+                 return res
+                })
                 form.resetFields()
                 form.setFieldsValue({
                   username: detail.username,
@@ -91,6 +94,7 @@ function UsersPage() {
                   country: detail.country,
                   isActive: detail.isActive ?? true,
                 })
+                console.log(detail, form.getFieldsValue())
                 setOpen(true)
               }}
             >
